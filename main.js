@@ -87,11 +87,10 @@ function renderFrame() {
 // camera.position.set( 0, 0, 5 );
 // camera.lookAt( 0, 0, 0 );
 
-// // Renderer
-// const renderer = new THREE.WebGLRenderer();
-// renderer.setSize(window.innerWidth, window.innerHeight);
-// document.body.appendChild(renderer.domElement);
-
+loader.load(
+  //'./assets/Table/exported_model.glb', // Path to modifited top file. doesn't look like it has legs
+  //'./assets/Table/table.glb', // just a block
+  
 // const loader = new GLTFLoader();
 
 // loader.load(
