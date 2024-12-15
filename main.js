@@ -79,52 +79,57 @@ import { GUI } from 'dat.gui';
 /** ---------Loading 3D Model -------- */
 
 // Scene
-// const scene = new THREE.Scene();
+const scene = new THREE.Scene();
 
-// // Camera
-// const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-// camera.position.z = 7;
-// camera.position.set( 0, 0, 5 );
-// camera.lookAt( 0, 0, 0 );
+// Camera
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 7;
+camera.position.set( 0, 0, 5 );
+camera.lookAt( 0, 0, 0 );
+
+// Renderer
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+const loader = new GLTFLoader();
 
 loader.load(
   //'./assets/Table/exported_model.glb', // Path to modifited top file. doesn't look like it has legs
   //'./assets/Table/table.glb', // just a block
   
-// const loader = new GLTFLoader();
+  './assets/Table/tible-sceneGraph-mesh-applyModifiers.gltf', // Loads the table with legs. Best working example. Don't know if I can edit the nodes yet
+  (gltf) => {
+    // Add the loaded model to the scene
+    scene.add(gltf.scene);
+    console.log('Model loaded:', gltf);
+    
+  },
+  (xhr) => {
+    // Progress callback (optional)
+    console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
+  },
+  (error) => {
+    // Error callback
+    console.error('An error happened', error);
+  }
+);
 
-// loader.load(
-//   './assets/Chair/GLBChairs.glb', // Path to your .glb file
-//   (gltf) => {
-//     // Add the loaded model to the scene
-//     scene.add(gltf.scene);
-//     console.log('Model loaded:', gltf);
-//   },
-//   (xhr) => {
-//     // Progress callback (optional)
-//     console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
-//   },
-//   (error) => {
-//     // Error callback
-//     console.error('An error happened', error);
-//   }
-// );
+function animate() {
+    requestAnimationFrame(animate);
+  
+    // Optionally, rotate the model
+    scene.rotation.y += 0.001;
+  
+    renderer.render(scene, camera);
+  }
+  
+  animate();
 
-// function animate() {
-//     requestAnimationFrame(animate);
-  
-//     // Optionally, rotate the model
-//     scene.rotation.y += 0.001;
-  
-//     renderer.render(scene, camera);
-//   }
-  
-//   animate();
-
-//   // Add lighting
-// const light = new THREE.DirectionalLight(0xffffff, 1);
-// light.position.set(5, 10, 7.5);
-// scene.add(light);
+  // Add lighting
+const light = new THREE.DirectionalLight(0xffffff, 1);
+light.position.set(5, 10, 7.5);
+scene.add(light);
 
 /** ------------------------------ */
 /** --------- UI controls -------- */
