@@ -3,48 +3,109 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { GUI } from 'dat.gui';
 
 // /** ---------Working Demo-------- */
-// const scene = new THREE.Scene();
-// const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-// camera.position.z = 100;
-// const gui = new GUI();
-// const renderer = new THREE.WebGLRenderer();
+// Scene
+const scene = new THREE.Scene();
 
-// renderer.setSize( window.innerWidth, window.innerHeight );
-// renderer.setAnimationLoop( renderFrame ); //Do I always need this animation loop?
-// document.body.appendChild( renderer.domElement );
+// Camera
+const camera = new THREE.PerspectiveCamera( 10, window.innerWidth / window.innerHeight, 0.1, 200 );
+camera.position.z = 100;
 
-// // Params for the initial cube size.
-// const params = { width: 5, height: 5, depth: 5 };
+// GUI
+const gui = new GUI();
 
-// // Make the cube and add it to the scene
+// Renderer
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setAnimationLoop( renderFrame ); //Do I always need this animation loop?
+document.body.appendChild( renderer.domElement );
+
+// Params for the initial cube size.
+const params = { width: 5, height: 5, depth: 5 };
+
+// Make the cube and add it to the scene
 // const geometry = new THREE.BoxGeometry( params.width, params.height, params.depth );
 // const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 // const cube = new THREE.Mesh( geometry, material );
 // scene.add( cube );
 
-// // Add GUI elements, resize cube, log new size
-// // TODO : Have the values not be float
-// //      : See what other options I can use to get size from user
-// gui.add(params, 'width', 1, 10).onChange((value) => {
-//   cube.scale.x = value;
-//   console.log(`new width ${value}`);
-// });
-// gui.add(params, 'height', 1, 10).onChange((value) => {
-//   cube.scale.y = value;
-//   console.log(`new height ${value}`);
-// });
-// gui.add(params, 'depth', 1, 10).onChange((value) => {
-//   cube.scale.z = value;
-//   console.log(`new depth ${value}`);
-// });
+// light
+const light = new THREE.DirectionalLight(0xffffff, 1);
+light.position.set(5, 10, 7.5);
+scene.add(light);
 
-// // Animation Loop. Needs to have the renderer.render in this loop so that the image is updated
-// // Renamed to 'renderFrame' to tell that the animation loop renders a frame
-// function renderFrame() {
-//     cube.rotation.x += 0.001;
-//     cube.rotation.y += 0.001;
-//     renderer.render( scene, camera );
-//  }
+// Load glTF file
+const loader = new GLTFLoader();
+loader.load(
+  //'./assets/Table/exported_model.glb', // Path to modifited top file. doesn't look like it has legs
+  //'./assets/Table/table.glb', // just a block
+  
+  './assets/Table/tible-sceneGraph-mesh-applyModifiers.gltf', // Loads the table with legs. Best working example. Don't know if I can edit the nodes yet
+  (gltf) => {
+    // Add the loaded model to the scene
+    debugger
+    //scene.add(gltf.scene);
+    gltf.scene.traverse((child) => {
+      if (child.isMesh) {
+          // DEV NOTE : Not sure if this is the correct action to add the table to the scene for manipulating it later
+          // Optionally clone the mesh (to avoid modifying the original)
+          const mesh = child.clone();
+          
+          // Add the mesh to the scene
+          scene.add(mesh);
+      }
+    });
+    console.log('Model loaded:', gltf);
+  },
+  (xhr) => {
+    // Progress callback (optional)
+    console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
+  },
+  (error) => {
+    // Error callback
+    console.error('An error happened', error);
+  }
+);
+
+// Add GUI elements, resize cube, log new size
+// TODO : Have the values not be float
+//      : See what other options I can use to get size from user
+gui.add(params, 'width', 1, 10).onChange((value) => {
+  //cube.scale.x = value;
+  scene.scale.x = value;
+  console.log(`new width ${value}`);
+});
+gui.add(params, 'height', 1, 10).onChange((value) => {
+  //cube.scale.y = value;
+  scene.scale.y = value;
+  console.log(`new height ${value}`);
+});
+gui.add(params, 'depth', 1, 10).onChange((value) => {
+  //cube.scale.z = value;
+  scene.scale.z = value;
+  console.log(`new depth ${value}`);
+});
+
+// Animation Loop. Needs to have the renderer.render in this loop so that the image is updated
+// Renamed to 'renderFrame' to tell that the animation loop renders a frame
+function renderFrame() {
+
+    scene.rotation.x += 0.001;
+    scene.rotation.y += 0.001;
+    
+    renderer.render( scene, camera );
+ }
+
+// DEV NOTE : not too sure what the difference between the below animation block and the 'Set Animation Loop' function that uses the above code
+//  function animate() {
+//   requestAnimationFrame(animate);
+
+//   // Optionally, rotate the model
+//   scene.rotation.y += 0.001;
+
+//   renderer.render(scene, camera);
+// }
+
+// animate();
 
 
 /** ------------------------------ */
@@ -79,57 +140,56 @@ import { GUI } from 'dat.gui';
 /** ---------Loading 3D Model -------- */
 
 // Scene
-const scene = new THREE.Scene();
+//const scene = new THREE.Scene();
 
 // Camera
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 7;
-camera.position.set( 0, 0, 5 );
-camera.lookAt( 0, 0, 0 );
+//const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+//camera.position.set( 0, 0, 5 );
+//camera.lookAt( 0, 0, 0 );
 
 // Renderer
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+//const renderer = new THREE.WebGLRenderer();
+//renderer.setSize(window.innerWidth, window.innerHeight);
+//document.body.appendChild(renderer.domElement);
 
-const loader = new GLTFLoader();
+// const loader = new GLTFLoader();
 
-loader.load(
-  //'./assets/Table/exported_model.glb', // Path to modifited top file. doesn't look like it has legs
-  //'./assets/Table/table.glb', // just a block
+// loader.load(
+//   //'./assets/Table/exported_model.glb', // Path to modifited top file. doesn't look like it has legs
+//   //'./assets/Table/table.glb', // just a block
   
-  './assets/Table/tible-sceneGraph-mesh-applyModifiers.gltf', // Loads the table with legs. Best working example. Don't know if I can edit the nodes yet
-  (gltf) => {
-    // Add the loaded model to the scene
-    scene.add(gltf.scene);
-    console.log('Model loaded:', gltf);
+//   './assets/Table/tible-sceneGraph-mesh-applyModifiers.gltf', // Loads the table with legs. Best working example. Don't know if I can edit the nodes yet
+//   (gltf) => {
+//     // Add the loaded model to the scene
+//     scene.add(gltf.scene);
+//     console.log('Model loaded:', gltf);
     
-  },
-  (xhr) => {
-    // Progress callback (optional)
-    console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
-  },
-  (error) => {
-    // Error callback
-    console.error('An error happened', error);
-  }
-);
+//   },
+//   (xhr) => {
+//     // Progress callback (optional)
+//     console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
+//   },
+//   (error) => {
+//     // Error callback
+//     console.error('An error happened', error);
+//   }
+// );
 
-function animate() {
-    requestAnimationFrame(animate);
+// function animate() {
+//     requestAnimationFrame(animate);
   
-    // Optionally, rotate the model
-    scene.rotation.y += 0.001;
+//     // Optionally, rotate the model
+//     scene.rotation.y += 0.001;
   
-    renderer.render(scene, camera);
-  }
+//     renderer.render(scene, camera);
+//   }
   
-  animate();
+//   animate();
 
   // Add lighting
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(5, 10, 7.5);
-scene.add(light);
+// const light = new THREE.DirectionalLight(0xffffff, 1);
+// light.position.set(5, 10, 7.5);
+// scene.add(light);
 
 /** ------------------------------ */
 /** --------- UI controls -------- */
