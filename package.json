@@ -5,5 +5,9 @@
   },
   "devDependencies": {
     "vite": "^6.0.3"
+  },
+  "scripts": {
+    "start": "npx vite --host"
+
   }
 }
