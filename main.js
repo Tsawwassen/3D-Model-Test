@@ -2,19 +2,19 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { GUI } from 'dat.gui';
 
-// /** ---------SPINNING CUBE-------- */
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-camera.position.z = 100;
-const gui = new GUI();
-const renderer = new THREE.WebGLRenderer();
+// /** ---------Working Demo-------- */
+// const scene = new THREE.Scene();
+// const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+// camera.position.z = 100;
+// const gui = new GUI();
+// const renderer = new THREE.WebGLRenderer();
 
-renderer.setSize( window.innerWidth, window.innerHeight );
-renderer.setAnimationLoop( renderFrame ); //Do I always need this animation loop?
-document.body.appendChild( renderer.domElement );
+// renderer.setSize( window.innerWidth, window.innerHeight );
+// renderer.setAnimationLoop( renderFrame ); //Do I always need this animation loop?
+// document.body.appendChild( renderer.domElement );
 
-// Params for the initial cube size.
-const params = { width: 5, height: 5, depth: 5 };
+// // Params for the initial cube size.
+// const params = { width: 5, height: 5, depth: 5 };
 
 // // Make the cube and add it to the scene
 // const geometry = new THREE.BoxGeometry( params.width, params.height, params.depth );
@@ -22,29 +22,29 @@ const params = { width: 5, height: 5, depth: 5 };
 // const cube = new THREE.Mesh( geometry, material );
 // scene.add( cube );
 
-// Add GUI elements, resize cube, log new size
-// TODO : Have the values not be float
-//      : See what other options I can use to get size from user
-gui.add(params, 'width', 1, 10).onChange((value) => {
-  cube.scale.x = value;
-  console.log(`new width ${value}`);
-});
-gui.add(params, 'height', 1, 10).onChange((value) => {
-  cube.scale.y = value;
-  console.log(`new height ${value}`);
-});
-gui.add(params, 'depth', 1, 10).onChange((value) => {
-  cube.scale.z = value;
-  console.log(`new depth ${value}`);
-});
+// // Add GUI elements, resize cube, log new size
+// // TODO : Have the values not be float
+// //      : See what other options I can use to get size from user
+// gui.add(params, 'width', 1, 10).onChange((value) => {
+//   cube.scale.x = value;
+//   console.log(`new width ${value}`);
+// });
+// gui.add(params, 'height', 1, 10).onChange((value) => {
+//   cube.scale.y = value;
+//   console.log(`new height ${value}`);
+// });
+// gui.add(params, 'depth', 1, 10).onChange((value) => {
+//   cube.scale.z = value;
+//   console.log(`new depth ${value}`);
+// });
 
-// Animation Loop. Needs to have the renderer.render in this loop so that the image is updated
-// Renamed to 'renderFrame' to tell that the animation loop renders a frame
-function renderFrame() {
-    cube.rotation.x += 0.001;
-    cube.rotation.y += 0.001;
-    renderer.render( scene, camera );
- }
+// // Animation Loop. Needs to have the renderer.render in this loop so that the image is updated
+// // Renamed to 'renderFrame' to tell that the animation loop renders a frame
+// function renderFrame() {
+//     cube.rotation.x += 0.001;
+//     cube.rotation.y += 0.001;
+//     renderer.render( scene, camera );
+//  }
 
 
 /** ------------------------------ */
