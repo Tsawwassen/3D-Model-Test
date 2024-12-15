@@ -2,6 +2,14 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { GUI } from 'dat.gui';
 
+
+/** TODO **
+ * 1. Move camera when the user click and drags
+ * 2. once the sizing is set, have a button to 'submit' the values and be used elsewhere (probably just use console.log for now)
+ * 3. Have the model adjust size as defined by the geometry nodes (procedural modeling?)
+ * 
+ * 
+ */
 // /** ---------Working Demo-------- */
 // Scene
 const scene = new THREE.Scene();
