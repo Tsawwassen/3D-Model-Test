@@ -16,11 +16,11 @@ document.body.appendChild( renderer.domElement );
 // Params for the initial cube size.
 const params = { width: 5, height: 5, depth: 5 };
 
-// Make the cube and add it to the scene
-const geometry = new THREE.BoxGeometry( params.width, params.height, params.depth );
-const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const cube = new THREE.Mesh( geometry, material );
-scene.add( cube );
+// // Make the cube and add it to the scene
+// const geometry = new THREE.BoxGeometry( params.width, params.height, params.depth );
+// const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+// const cube = new THREE.Mesh( geometry, material );
+// scene.add( cube );
 
 // Add GUI elements, resize cube, log new size
 // TODO : Have the values not be float
