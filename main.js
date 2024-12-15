@@ -35,34 +35,37 @@ scene.add(light);
 
 // Load glTF file
 const loader = new GLTFLoader();
-const table = [];
+
+let tableTop;
+let tableLegs = [];
+
 
 loader.load(
   //'./assets/Table/exported_model.glb', // Path to modifited top file. doesn't look like it has legs
   //'./assets/Table/table.glb', // just a block
   
-  './assets/Table/tible-sceneGraph-mesh-applyModifiers.gltf', // Loads the table with legs. Best working example. Don't know if I can edit the nodes yet
+  './assets/working/table-sceneGraph-mesh-applyModifiers.gltf', // Loads the table with legs. Best working example. Don't know if I can edit the nodes yet
   (gltf) => {
-    // Add the loaded model to the scene
-    
-  
-    // gltf.scene.traverse((child) => {
-    //   if (child.isMesh) {
-    //       // DEV NOTE : Not sure if this is the correct action to add the table to the scene for manipulating it later
-    //       // Optionally clone the mesh (to avoid modifying the original)
-    //       const mesh = child.clone();
-          
-    //       // Add the mesh to the scene
-    //       scene.add(mesh);
-    //   }
-    // });
-    table.push(gltf.scenes[0].children[0]);
+
+    /** DEV NOTE
+     * Thought it would be clean to have a variable for each mesh of the table (top part and the legs)
+     * To get these variables, i traversed the gltf file to find the closest child that had a scale value and saved that
+     * Don't use the first 'scale' value since that will scale the whole model, and not the one part you want to change.
+     * Not sure if this is a long term solution since the legs don't move with the table as expected
+     * 
+     */
+
+
+    //logic to add individual mesh parts to variables
+    tableTop = gltf.scenes[0].children[0];
+
     gltf.scenes[0].children[0].children.forEach(child => {
-      table.push(child);
+      tableLegs.push(child);
     });
-    //table.push(gltf.scenes[0].children[0].children); 
+    
+    scene.add(tableTop);
    
-    table.forEach((mesh) => {
+    tableLegs.forEach((mesh) => {
       scene.add(mesh);
   });
 
@@ -83,18 +86,20 @@ loader.load(
 //      : See what other options I can use to get size from user
 //      : Legs are not moving with the top with the user changes the width/height value
 gui.add(params, 'width', 1, 10).onChange((value) => {
-  table[0].scale.x = value;
+  tableTop.scale.x = value;
   console.log(`new width ${value}`);
 });
-gui.add(params, 'height', 1, 10).onChange((value) => { // DEV NOTE : Don't like that i'm hard coding each leg of the table,
-  table[1].scale.y = value;
-  table[2].scale.y = value;
-  table[3].scale.y = value;
-  table[4].scale.y = value;
+
+gui.add(params, 'height', 1, 10).onChange((value) => { 
+  tableLegs.forEach((leg) => {
+    leg.scale.y = value;
+  });
+
   console.log(`new height ${value}`);
 });
+
 gui.add(params, 'depth', 1, 10).onChange((value) => {
-  table[0].scale.z = value;
+  tableTop.scale.z = value;
   console.log(`new depth ${value}`);
 });
 
